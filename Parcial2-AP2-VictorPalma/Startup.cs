@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Blazored.Toast;
 using Parcial2_AP2_VictorPalma.DAL;
 using Microsoft.EntityFrameworkCore;
+using Parcial2_AP2_VictorPalma.BLL;
 
 namespace Parcial2_AP2_VictorPalma
 {
@@ -37,6 +38,9 @@ namespace Parcial2_AP2_VictorPalma
              );
 
             services.AddBlazoredToast();
+
+            //INYECCION DE BLL
+            services.AddTransient<VentasBLL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
