@@ -11,6 +11,7 @@ namespace Parcial2_AP2_VictorPalma.DAL
     {
         public DbSet<Clientes> Cliente { get; set; }
         public DbSet<Ventas> Venta { get; set; }
+        public DbSet<Cobros> Cobro { get; set; }
 
         public Contexto(DbContextOptions<Contexto> option) : base(option) { }
 

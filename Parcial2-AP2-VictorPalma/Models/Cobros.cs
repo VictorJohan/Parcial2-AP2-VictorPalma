@@ -21,12 +21,12 @@ namespace Parcial2_AP2_VictorPalma.Models
         public virtual Clientes Cliente { get; set; }
 
         [ForeignKey("CobroId")]
-        public virtual List<CobrosDetalles> CobroDetalle { get; set; }
+        public virtual List<CobrosDetalles> CobrosDetalle { get; set; }
 
         public Cobros()
         {
             Fecha = DateTime.Now;
-            CobroDetalle = new List<CobrosDetalles>();
+            CobrosDetalle = new List<CobrosDetalles>();
         }
     }
 }

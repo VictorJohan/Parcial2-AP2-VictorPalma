@@ -20,5 +20,6 @@ namespace Parcial2_AP2_VictorPalma.Models
 
         [ForeignKey("ClienteId")]
         public virtual Clientes Cliente { get; set; }
+
     }
 }
