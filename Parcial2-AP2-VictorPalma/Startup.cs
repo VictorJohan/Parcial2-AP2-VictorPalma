@@ -41,6 +41,8 @@ namespace Parcial2_AP2_VictorPalma
 
             //INYECCION DE BLL
             services.AddTransient<VentasBLL>();
+            services.AddTransient<ClientesBLL>();
+            services.AddTransient<CobrosBLL>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
