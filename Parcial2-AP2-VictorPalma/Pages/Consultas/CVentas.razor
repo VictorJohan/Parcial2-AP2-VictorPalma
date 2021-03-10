@@ -65,16 +65,16 @@
                 </tbody>
             </table>
 
-
-
         </div>
 
     </div>
 </div>
 
 @code {
+    [Inject]
+    public VentasBLL ventasBLL { get; set; }
 
-    private string[] filtro = { "Id", "Nombre Cliente", "Monto", "Balance" };
+    private string[] filtro = { "Id", "Nombre Cliente", "Monto", "Balance", "Todo" };
     private string opcion;
     private string criterio;
     List<Ventas> ventasList = new List<Ventas>();
@@ -87,9 +87,10 @@
     }
 
 
-    private void Buscar()
+    private async void Buscar()
     {
         ventasList = new List<Ventas>();
+
         switch (opcion)
         {
             case "Id":
@@ -98,7 +99,7 @@
                 bool validoId = Int32.TryParse(criterio, out id);
                 if (validoId)
                 {
-                    //ventasList = VentasBLL.GetList(v => v.VentaId == id);
+                    ventasList = await ventasBLL.GetList(v => v.VentaId == id);
                 }
                 else
                 {
@@ -106,7 +107,7 @@
                 }
                 break;
             case "Nombre Cliente":
-                //ventasList = VentasBLL.GetList(v => v.Cliente.Nombres  == criterio);
+                ventasList = await ventasBLL.GetList(v => v.Cliente.Nombres == criterio);
                 break;
 
             case "Monto":
@@ -115,7 +116,7 @@
                 bool validoMonto = Double.TryParse(criterio, out monto);
                 if (validoMonto)
                 {
-                    //ventasList = VentasBLL.GetList(v => v.Monto == monto);
+                    ventasList = await ventasBLL.GetList(v => v.Monto == monto);
                 }
                 else
                 {
@@ -128,12 +129,15 @@
                 bool validoBalance = Double.TryParse(criterio, out balance);
                 if (validoBalance)
                 {
-                    //ventasList = VentasBLL.GetList(v => v.Balance == Balance);
+                    ventasList = await ventasBLL.GetList(v => v.Balance == balance);
                 }
                 else
                 {
                     toast.ShowError("Asegurese de haber introducido un valor numerico.");
                 }
+                break;
+            case "Todo":
+                ventasList = await ventasBLL.GetList(v => true);
                 break;
         }
     }
