@@ -167,9 +167,9 @@
     {
         labelDetalle = "Facturas Cobradas";
         var registro = await cobrosBLL.Buscar(this.CobroId);
-        if(registro != null)
+        if (registro != null)
         {
-            this.Cobro =  registro;
+            this.Cobro = registro;
             ListarCobros();
         }
         else
@@ -182,10 +182,12 @@
     private async void Guardar()
     {
         Sync();
+        if (!Valida()) { return; }
         Cobro.CobroId = this.CobroId;
         if (await cobrosBLL.Guardar(Cobro))
         {
             toast.ShowSuccess("Guardado");
+            Limpiar();
         }
         else
         {
@@ -208,6 +210,7 @@
     private void Limpiar()
     {
         this.Cobro = new Cobros();
+        listaFactura = new List<Ventas>();
         labelDetalle = "Facturas Pendientes";
     }
 
@@ -215,8 +218,13 @@
     {
         if (Cobro.ClienteId == 0) { return; }
         Cobro.Conteo = 0;
-        listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId);
+        listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId && v.IsCobrado == false);
 
+        RefreshContador();
+    }
+
+    public void RefreshContador()
+    {
         foreach (var item in listaFactura)
         {
             if (item.IsCobrado == false)
@@ -230,11 +238,13 @@
         {
             Cobro.TotalCobrado += venta.Balance;
             venta.Cobrado = venta.Balance;
+            Cobro.Conteo--;
         }
         else
         {
             Cobro.TotalCobrado -= venta.Balance;
             venta.Cobrado -= venta.Balance;
+            Cobro.Conteo++;
         }
     }
 
@@ -258,5 +268,16 @@
     private async void ListarCobros()
     {
         listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId && v.IsCobrado == true);
+    }
+
+    public bool Valida()
+    {
+        if(Cobro.CobrosDetalle.Count == 0)
+        {
+            toast.ShowInfo("No hay facturas marcadas para pagar.");
+            return false;
+        }
+
+        return true;
     }
 }

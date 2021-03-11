@@ -26,7 +26,6 @@ namespace Parcial2_AP2_VictorPalma.BLL
             {
                 if (!await _contexto.Cobro.AnyAsync(c => c.CobroId == cobro.CobroId))
                 {
-                    _contexto.Entry(cobro.Cliente).State = EntityState.Modified;
                     _contexto.Cobro.Add(cobro);
                     ok = await _contexto.SaveChangesAsync() > 0;
                 }
