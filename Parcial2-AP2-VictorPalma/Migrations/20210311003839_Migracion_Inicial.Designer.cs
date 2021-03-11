@@ -9,7 +9,7 @@ using Parcial2_AP2_VictorPalma.DAL;
 namespace Parcial2_AP2_VictorPalma.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20210310231815_Migracion_Inicial")]
+    [Migration("20210311003839_Migracion_Inicial")]
     partial class Migracion_Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,10 +56,10 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("BalanceCobro")
-                        .HasColumnType("REAL");
-
                     b.Property<int>("ClienteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Conteo")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Fecha")
@@ -68,8 +68,8 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                     b.Property<string>("Observaciones")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Totales")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("TotalCobrado")
+                        .HasColumnType("REAL");
 
                     b.HasKey("CobroId");
 
@@ -84,9 +84,6 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("REAL");
-
                     b.Property<double>("Cobrado")
                         .HasColumnType("REAL");
 
@@ -95,6 +92,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCobrado")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Monto")
                         .HasColumnType("REAL");

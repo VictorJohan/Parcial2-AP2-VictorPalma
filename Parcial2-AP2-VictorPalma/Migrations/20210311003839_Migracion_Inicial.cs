@@ -28,8 +28,8 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Observaciones = table.Column<string>(type: "TEXT", nullable: true),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Totales = table.Column<int>(type: "INTEGER", nullable: false),
-                    BalanceCobro = table.Column<double>(type: "REAL", nullable: false),
+                    Conteo = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalCobrado = table.Column<double>(type: "REAL", nullable: false),
                     ClienteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -74,8 +74,8 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                     CobroId = table.Column<int>(type: "INTEGER", nullable: false),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Monto = table.Column<double>(type: "REAL", nullable: false),
-                    Balance = table.Column<double>(type: "REAL", nullable: false),
-                    Cobrado = table.Column<double>(type: "REAL", nullable: false)
+                    Cobrado = table.Column<double>(type: "REAL", nullable: false),
+                    IsCobrado = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
