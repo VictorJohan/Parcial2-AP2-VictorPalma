@@ -15,6 +15,7 @@ namespace Parcial2_AP2_VictorPalma.Models
         public DateTime Fecha { get; set; }
         public int Conteo { get; set; }
         public double TotalCobrado { get; set; }
+        [Required(ErrorMessage = "Se requiere selecionar un cliente.")]
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]

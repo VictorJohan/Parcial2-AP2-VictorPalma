@@ -93,7 +93,7 @@ namespace Parcial2_AP2_VictorPalma.BLL
         }
 
 
-        public async Task<List<Cobros>> GetCobros(Expression<Func<Cobros, bool>> criterio)
+        public async Task<List<Cobros>> GetList(Expression<Func<Cobros, bool>> criterio)
         {
             List<Cobros> lista = new List<Cobros>();
 

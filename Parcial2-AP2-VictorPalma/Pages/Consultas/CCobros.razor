@@ -1,6 +1,143 @@
 ﻿@page "/cCobros"
-<h3>CCobros</h3>
+@inject IToastService toast;
+
+<div class="card">
+    <div class="card-header">
+        <h3>Consulta Ventas</h3>
+    </div>
+    <div class="card-body">
+        <div class="row align-items-center">
+
+            <div class="col">
+                <div class="form-group row">
+                    <label class="col-form-label">Filtro</label>
+
+                    <div class="col-sm-9">
+                        <select @bind="opcion" class="form-control">
+                            @foreach (var item in filtro)
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group row">
+                    <label class="col-form-label">Fecha</label>
+                    <div class="col-sm-10">
+                        <input @bind="fecha" type="datetime" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group row">
+                    <label class="col-form-label">Criterio</label>
+                    <div class="input-group col-sm-10">
+                        <input @bind="criterio" type="text" class="form-control" />
+                        <div class="input-group-append">
+                            <button type="button" style="z-index:0" class="btn btn-primary" @onclick="Buscar">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+            <table class="table table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Id</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Total Cobrado</th>
+                        <th>Facturas Pendientes</th>
+
+                    </tr>
+                </thead>
+                <tbody class="bg-white">
+                    @foreach (var item in ventasList)
+                    {
+                        <tr>
+                            <td>@item.CobroId</td>
+                            <td>@item.Fecha</td>
+                            <td>@item.Cliente.Nombres</td>
+                            <td>@item.TotalCobrado</td>
+                            <td>@item.Conteo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>
 
 @code {
+    [Inject]
+    public CobrosBLL cobrosBLL { get; set; }
 
+    private string[] filtro = { "Id", "No. Facturas Pendientes", "Nombre Cliente", "Fecha", "Monto Total", "Todo" };
+    private string opcion;
+    private string criterio;
+    List<Cobros> ventasList = new List<Cobros>();
+    DateTime fecha;
+    protected override void OnInitialized()
+    {
+        opcion = "";
+        criterio = "";
+        fecha = DateTime.Now;
+    }
+
+
+    private async void Buscar()
+    {
+        ventasList = new List<Cobros>();
+
+        switch (opcion)
+        {
+            case "Id":
+                int id;
+
+                bool validoId = Int32.TryParse(criterio, out id);
+                if (validoId)
+                {
+                    ventasList = await cobrosBLL.GetList(c => c.CobroId == id);
+                }
+                else
+                {
+                    toast.ShowError("Este Id no es valido.");
+                }
+                break;
+            case "Nombre Cliente":
+                ventasList = await cobrosBLL.GetList(c => c.Cliente.Nombres == criterio);
+                break;
+
+            case "Monto Total":
+                double monto;
+
+                bool validoMonto = Double.TryParse(criterio, out monto);
+                if (validoMonto)
+                {
+                    ventasList = await cobrosBLL.GetList(c => c.TotalCobrado == monto);
+                }
+                else
+                {
+                    toast.ShowError("Asegurese de haber introducido un valor numerico.");
+                }
+                break;
+            case "Fecha":
+
+                ventasList = await cobrosBLL.GetList(c => c.Fecha == fecha);
+                break;
+            case "Todo":
+                ventasList = await cobrosBLL.GetList(v => true);
+                break;
+        }
+    }
 }

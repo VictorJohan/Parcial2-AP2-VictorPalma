@@ -41,13 +41,14 @@
                 <div class="form-group row ">
                     <label class="col-form-label">Cliente</label>
                     <div class="col-sm-11">
-                        <select @bind="Cobro.ClienteId" @onclick="SourceTable" class="form-control">
+                        <InputSelect @bind-Value="Cobro.ClienteId" @onclick="SourceTable" class="form-control">
                             @foreach (var item in listaCliente)
                             {
                                 <option value="@item.ClienteId">@item.Nombres</option>
                             }
 
-                        </select>
+                        </InputSelect>
+                        <ValidationMessage For="(() => Cobro.ClienteId)"/>
                     </div>
                 </div>
 

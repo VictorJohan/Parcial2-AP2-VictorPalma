@@ -74,7 +74,7 @@
     [Inject]
     public VentasBLL ventasBLL { get; set; }
 
-    private string[] filtro = { "Id", "Nombre Cliente", "Monto", "Balance", "Todo" };
+    private string[] filtro = { "Id", "Nombre Cliente", "Monto", "Balance", "Facturas Pagadas", "Facturas Pendientes", "Todo" };
     private string opcion;
     private string criterio;
     List<Ventas> ventasList = new List<Ventas>();
@@ -83,7 +83,6 @@
     {
         opcion = "";
         criterio = "";
-
     }
 
 
@@ -136,6 +135,14 @@
                     toast.ShowError("Asegurese de haber introducido un valor numerico.");
                 }
                 break;
+            case "Facturas Pagadas":
+                ventasList = await ventasBLL.GetList(v => v.IsCobrado == true);
+                break;
+
+            case "Facturas Pendientes":
+                ventasList = await ventasBLL.GetList(v => v.IsCobrado == false);
+                break;
+
             case "Todo":
                 ventasList = await ventasBLL.GetList(v => true);
                 break;
