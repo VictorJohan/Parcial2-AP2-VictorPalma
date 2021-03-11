@@ -56,7 +56,7 @@
 
         <div class="card">
             <div class="card-header bg-info">
-                <h5 class="text-white">Facturas Pendientes</h5>
+                <h5 class="text-white">@labelDetalle</h5>
             </div>
             <div class="card-body">
                 <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
@@ -79,7 +79,7 @@
                                     <td>@item.Fecha</td>
                                     <td>@item.Monto</td>
                                     <td>@item.Balance</td>
-                                    <td>@item.VentaId</td>
+                                    <td>@item.Cobrado</td>
                                     <td><InputCheckbox @bind-Value="item.IsCobrado" @onclick="() => Cotejo(item)" class="form-check" /></td>
                                 </tr>
                             }
@@ -138,6 +138,8 @@
 
     [Inject]
     public ClientesBLL clientesBLL { get; set; }
+    [Inject]
+    public CobrosBLL cobrosBLL { get; set; }
 
     [Inject]
     public VentasBLL ventasBLL { get; set; }
@@ -145,32 +147,68 @@
     private Cobros Cobro = new Cobros();
     private List<Clientes> listaCliente = new List<Clientes>();
 
+    string labelDetalle;
 
     List<Ventas> listaFactura = new List<Ventas>();
 
     protected async override Task OnInitializedAsync()
     {
         listaCliente = await clientesBLL.GetList(c => true);
+        labelDetalle = "Facturas Pendientes";
     }
 
     private void Nuevo()
     {
 
+        Limpiar();
     }
 
-    private void Buscar()
+    private async void Buscar()
     {
+        labelDetalle = "Facturas Cobradas";
+        var registro = await cobrosBLL.Buscar(this.CobroId);
+        if(registro != null)
+        {
+            this.Cobro =  registro;
+            ListarCobros();
+        }
+        else
+        {
+            toast.ShowInfo("No se encontro el registro.");
+        }
 
     }
 
-    private void Guardar()
+    private async void Guardar()
     {
-
+        Sync();
+        Cobro.CobroId = this.CobroId;
+        if (await cobrosBLL.Guardar(Cobro))
+        {
+            toast.ShowSuccess("Guardado");
+        }
+        else
+        {
+            toast.ShowInfo("Este registro no puede ser modificado.");
+        }
     }
 
-    private void Eliminar()
+    private async void Eliminar()
     {
+        if (await cobrosBLL.Eliminar(this.CobroId))
+        {
+            toast.ShowSuccess("Eliminado");
+        }
+        else
+        {
+            toast.ShowError("No se pudo eliminar el registro.");
+        }
+    }
 
+    private void Limpiar()
+    {
+        this.Cobro = new Cobros();
+        labelDetalle = "Facturas Pendientes";
     }
 
     private async void SourceTable()
@@ -191,10 +229,34 @@
         if (venta.IsCobrado == false)
         {
             Cobro.TotalCobrado += venta.Balance;
+            venta.Cobrado = venta.Balance;
         }
         else
         {
             Cobro.TotalCobrado -= venta.Balance;
+            venta.Cobrado -= venta.Balance;
         }
+    }
+
+    private void Sync()
+    {
+        foreach (var item in listaFactura)
+        {
+            if (item.IsCobrado == true)
+            {
+                var detalle = new CobrosDetalles
+                {
+                    Fecha = item.Fecha,
+                    Monto = item.Cobrado,
+                };
+
+                Cobro.CobrosDetalle.Add(detalle);
+            }
+        }
+    }
+
+    private async void ListarCobros()
+    {
+        listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId && v.IsCobrado == true);
     }
 }
