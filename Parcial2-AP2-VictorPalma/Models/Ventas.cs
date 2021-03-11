@@ -17,7 +17,7 @@ namespace Parcial2_AP2_VictorPalma.Models
         [Range(minimum:100, maximum: 100000)]
         public double Monto { get; set; }
         public double Balance { get; set; }
-
+        public bool IsCobrado { get; set; }
         [ForeignKey("ClienteId")]
         public virtual Clientes Cliente { get; set; }
 

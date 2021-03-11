@@ -14,7 +14,5 @@ namespace Parcial2_AP2_VictorPalma.Models
         public DateTime Fecha { get; set; }
         public double Monto { get; set; }
         public double Cobrado { get; set; }
-        public bool IsCobrado { get; set; }
-
     }
 }
