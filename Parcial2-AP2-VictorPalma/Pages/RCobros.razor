@@ -72,15 +72,15 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                            @foreach (var item in Cobro.CobrosDetalle)
+                            @foreach (var item in cobroDetalleDTO)
                             {
                                 <tr>
                                     <td>@item.CobroId</td>
                                     <td>@item.Fecha</td>
                                     <td>@item.Monto</td>
                                     <td>@item.Cobrado</td>
-                                    <td><InputCheckbox @bind-Value="item.IsCobrado" @onclick="() => Cotejar(item)" class="form-check"/></td>
-                                   
+                                    <td><InputCheckbox @bind-Value="item.IsCobrado" @onclick="() => Cotejar(item)" class="form-check" /></td>
+
                                 </tr>
                             }
                         </tbody>
@@ -140,6 +140,7 @@
     [Inject]
     public VentasBLL ventasBLL { get; set; }
 
+    private List<dynamic> cobroDetalleDTO = new List<dynamic>();
     private List<Clientes> listaCliente = new List<Clientes>();
     private List<Ventas> listaFactura = new List<Ventas>();
 
@@ -172,18 +173,22 @@
 
     public async void SourceTabla()
     {
-        if(Cobro.ClienteId == 0) { return; }
+        if (Cobro.ClienteId == 0) { return; }
         listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId);
 
         foreach (var item in listaFactura)
         {
-            var detalleCobro = new CobrosDetalles
+            var obj = new
             {
-                Monto = item.Balance,
+                Id = item.VentaId,
                 Fecha = item.Fecha,
+                Monto = item.Monto,
+                Balance = item.Balance,
+                Cobrado = 0,
+                IsCobrado = false
             };
 
-            Cobro.CobrosDetalle.Add(detalleCobro);
+            cobroDetalleDTO.Add(obj);
         }
     }
 
