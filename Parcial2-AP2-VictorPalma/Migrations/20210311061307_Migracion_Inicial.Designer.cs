@@ -9,7 +9,7 @@ using Parcial2_AP2_VictorPalma.DAL;
 namespace Parcial2_AP2_VictorPalma.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20210311033217_Migracion_Inicial")]
+    [Migration("20210311061307_Migracion_Inicial")]
     partial class Migracion_Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

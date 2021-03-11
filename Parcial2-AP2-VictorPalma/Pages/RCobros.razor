@@ -201,6 +201,7 @@
         if (await cobrosBLL.Eliminar(this.CobroId))
         {
             toast.ShowSuccess("Eliminado");
+            Limpiar();
         }
         else
         {
@@ -213,6 +214,7 @@
         this.Cobro = new Cobros();
         listaFactura = new List<Ventas>();
         labelDetalle = "Facturas Pendientes";
+        this.CobroId = 0;
     }
 
     private async void SourceTable()

@@ -47,7 +47,6 @@ namespace Parcial2_AP2_VictorPalma.BLL
             {
                 cobro = await _contexto.Cobro
                     .Where(c => c.CobroId == id)
-                    .Include(c => c.Cliente)
                     .Include(c => c.CobrosDetalle)
                     .AsNoTracking()
                     .SingleOrDefaultAsync();
@@ -73,7 +72,7 @@ namespace Parcial2_AP2_VictorPalma.BLL
         public async Task<bool> Eliminar(int id)
         {
             bool ok = false;
-
+            bool ok2 = Restablecer(id);
             try
             {
                 var registro = await Buscar(id);
@@ -89,9 +88,28 @@ namespace Parcial2_AP2_VictorPalma.BLL
                 throw;
             }
 
-            return ok;
+            return ok == true && ok2 == true;
         }
 
+        private bool Restablecer(int id)
+        {
+            bool ok = false;
+            List<Ventas> lista = new List<Ventas>();
+            foreach (var item in _contexto.Venta.Where(v => v.ClienteId == id).ToList())
+            {
+                if(item.IsCobrado == true)
+                {
+                    item.IsCobrado = false;
+                    item.Cobrado = 0;
+                    lista.Add(item);
+                }
+            }
+
+            _contexto.UpdateRange(lista);
+            ok = _contexto.SaveChanges() > 0;
+
+            return ok;
+        }
 
         public async Task<List<Cobros>> GetList(Expression<Func<Cobros, bool>> criterio)
         {
