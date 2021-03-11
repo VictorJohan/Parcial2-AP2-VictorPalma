@@ -13,8 +13,8 @@ namespace Parcial2_AP2_VictorPalma.Models
         public int CobroId { get; set; }
         public string Observaciones { get; set; }
         public DateTime Fecha { get; set; }
-        public int Totales { get; set; }
-        public double BalanceCobro { get; set; }
+        public int Conteo { get; set; }
+        public double TotalCobrado { get; set; }
         public int ClienteId { get; set; }
 
         [ForeignKey("ClienteId")]

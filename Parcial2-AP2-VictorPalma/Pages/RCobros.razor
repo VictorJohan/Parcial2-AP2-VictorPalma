@@ -41,7 +41,13 @@
                 <div class="form-group row ">
                     <label class="col-form-label">Cliente</label>
                     <div class="col-sm-11">
-                        <InputSelect @bind-Value="Cobro.ClienteId" class="form-control" />
+                        <select @bind="Cobro.ClienteId" @onclick="SourceTabla" class="form-control">
+                            @foreach (var item in listaCliente)
+                            {
+                                <option value="@item.ClienteId">@item.Nombres</option>
+                            }
+
+                        </select>
                     </div>
                 </div>
 
@@ -66,6 +72,17 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white">
+                            @foreach (var item in Cobro.CobrosDetalle)
+                            {
+                                <tr>
+                                    <td>@item.CobroId</td>
+                                    <td>@item.Fecha</td>
+                                    <td>@item.Monto</td>
+                                    <td>@item.Cobrado</td>
+                                    <td><InputCheckbox @bind-Value="item.IsCobrado" @onclick="() => Cotejar(item)" class="form-check"/></td>
+                                   
+                                </tr>
+                            }
                         </tbody>
                     </table>
 
@@ -76,7 +93,7 @@
                         <div class="form-group row m-1">
                             <label class="col-form-label">Totales</label>
                             <div class="input-group col-sm-3">
-                                <InputNumber @bind-Value="Cobro.Totales" readonly class="form-control" />
+                                <InputNumber @bind-Value="Cobro.Conteo" readonly class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -86,7 +103,7 @@
                             <label class="col-form-label">Balance</label>
 
                             <div class="col-sm-3">
-                                <InputNumber @bind-Value="Cobro.BalanceCobro" readonly class="form-control" />
+                                <InputNumber @bind-Value="Cobro.TotalCobrado" readonly class="form-control" />
                             </div>
 
                         </div>
@@ -118,12 +135,19 @@
 @code {
     [Parameter]
     public int CobroId { get; set; }
+    [Inject]
+    public ClientesBLL clientesBLL { get; set; }
+    [Inject]
+    public VentasBLL ventasBLL { get; set; }
+
+    private List<Clientes> listaCliente = new List<Clientes>();
+    private List<Ventas> listaFactura = new List<Ventas>();
 
     private Cobros Cobro = new Cobros();
 
-    protected override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
-
+        listaCliente = await clientesBLL.GetList(c => true);
     }
 
     private void Nuevo()
@@ -145,4 +169,16 @@
     {
 
     }
+
+    public async void SourceTabla()
+    {
+        if(Cobro.ClienteId == 0) { return; }
+        listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId);
+    }
+
+    public void Cotejar(CobrosDetalles cobro)
+    {
+
+    }
+
 }
