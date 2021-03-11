@@ -41,7 +41,7 @@
                 <div class="form-group row ">
                     <label class="col-form-label">Cliente</label>
                     <div class="col-sm-11">
-                        <select @bind="Cobro.ClienteId" class="form-control">
+                        <select @bind="Cobro.ClienteId" @onclick="SourceTable" class="form-control">
                             @foreach (var item in listaCliente)
                             {
                                 <option value="@item.ClienteId">@item.Nombres</option>
@@ -72,7 +72,17 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                           
+                            @foreach (var item in listaFactura)
+                            {
+                                <tr>
+                                    <td>@item.VentaId</td>
+                                    <td>@item.Fecha</td>
+                                    <td>@item.Monto</td>
+                                    <td>@item.Balance</td>
+                                    <td>@item.VentaId</td>
+                                    <td><InputCheckbox @bind-Value="item.IsCobrado" @onclick="() => Cotejo(item)" class="form-check" /></td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
 
@@ -136,6 +146,7 @@
     private List<Clientes> listaCliente = new List<Clientes>();
 
 
+    List<Ventas> listaFactura = new List<Ventas>();
 
     protected async override Task OnInitializedAsync()
     {
@@ -162,5 +173,28 @@
 
     }
 
-    
+    private async void SourceTable()
+    {
+        if (Cobro.ClienteId == 0) { return; }
+        Cobro.Conteo = 0;
+        listaFactura = await ventasBLL.GetList(v => v.ClienteId == Cobro.ClienteId);
+
+        foreach (var item in listaFactura)
+        {
+            if (item.IsCobrado == false)
+                Cobro.Conteo++;
+        }
+    }
+
+    private void Cotejo(Ventas venta)
+    {
+        if (venta.IsCobrado == false)
+        {
+            Cobro.TotalCobrado += venta.Balance;
+        }
+        else
+        {
+            Cobro.TotalCobrado -= venta.Balance;
+        }
+    }
 }

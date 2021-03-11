@@ -18,6 +18,7 @@ namespace Parcial2_AP2_VictorPalma.Models
         public double Monto { get; set; }
         public double Balance { get; set; }
         public bool IsCobrado { get; set; }
+        public double Cobrado { get; set; }
         [ForeignKey("ClienteId")]
         public virtual Clientes Cliente { get; set; }
 

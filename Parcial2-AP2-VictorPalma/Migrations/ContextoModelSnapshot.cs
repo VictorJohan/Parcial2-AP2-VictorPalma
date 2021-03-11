@@ -82,17 +82,11 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Cobrado")
-                        .HasColumnType("REAL");
-
                     b.Property<int>("CobroId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsCobrado")
-                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Monto")
                         .HasColumnType("REAL");
@@ -116,8 +110,14 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<double>("Cobrado")
+                        .HasColumnType("REAL");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCobrado")
+                        .HasColumnType("INTEGER");
 
                     b.Property<double>("Monto")
                         .HasColumnType("REAL");
@@ -134,7 +134,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                             VentaId = 1,
                             Balance = 1000.0,
                             ClienteId = 1,
+                            Cobrado = 0.0,
                             Fecha = new DateTime(2020, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCobrado = false,
                             Monto = 1000.0
                         },
                         new
@@ -142,7 +144,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                             VentaId = 2,
                             Balance = 800.0,
                             ClienteId = 1,
+                            Cobrado = 0.0,
                             Fecha = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCobrado = false,
                             Monto = 900.0
                         },
                         new
@@ -150,7 +154,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                             VentaId = 3,
                             Balance = 2000.0,
                             ClienteId = 2,
+                            Cobrado = 0.0,
                             Fecha = new DateTime(2020, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCobrado = false,
                             Monto = 2000.0
                         },
                         new
@@ -158,7 +164,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                             VentaId = 4,
                             Balance = 1800.0,
                             ClienteId = 2,
+                            Cobrado = 0.0,
                             Fecha = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCobrado = false,
                             Monto = 1900.0
                         },
                         new
@@ -166,7 +174,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                             VentaId = 5,
                             Balance = 3000.0,
                             ClienteId = 3,
+                            Cobrado = 0.0,
                             Fecha = new DateTime(2020, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCobrado = false,
                             Monto = 3000.0
                         },
                         new
@@ -174,7 +184,9 @@ namespace Parcial2_AP2_VictorPalma.Migrations
                             VentaId = 6,
                             Balance = 1900.0,
                             ClienteId = 3,
+                            Cobrado = 0.0,
                             Fecha = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsCobrado = false,
                             Monto = 2900.0
                         });
                 });
